@@ -56,3 +56,26 @@ Real world problems include real objects. For example, suppose we want to write 
 **The structures given above are recursive structures, for example, if we remove the first element from a permutation, we get a permutation of remaining elements. Learning to think recursive about these structures is learning to break a big problem into small instances of same kind.**
 
 **Modeling your application in terms of well-defined structures and algorithms is the most important single step towards a solution.**
+
+
+# Interview Questions
+1. **Problem:** Write a function to perform integer division without using either the `/` or `*` operators.
+
+    **Solution:** The key observation is that the quotient of a division is just the number of times that we can subtract the divisor from the dividend without making it negative.
+
+    Here we are increasing the value of divisor using **left shift by 1** (equivalent to **multiply by 2**) until it is greater than or equal to dividend. For example, consider `dividend = 15` and `divisor = 5`, we are increasing divisor `5` using `left shift by 1` until it can be safely substracted from dividend `15`. In this case `5 << 1 = 10`,
+    can safely be substracted from `15`. That means we are shifting one time, but since we are "shifting", we also have to shift the number of "shifting" which becomes `2`. Now we substract `10` from `15`, `15 - 10 = 5`, this is the new dividend. Now we apply same method to divide new dividend `5` by the divisor `5`, which gives `1`. Now we add this result to previous result.
+
+    **Psuedocode:**
+    ```
+    DIVIDE_USING_SHIFT_OPERATOR(dividend, divisor) 
+        1. Handle base cases like divide by 0, and divide by 1 etc
+        2. Set quotient = 1 and temp = divisor
+        3. Repeat while (temp << 1) <= dividend 
+                a. temp = temp << 1
+                b. quotient = quotient << 1
+        4. quotient = quotient + DIVIDE_USING_SHIFT_OPERATOR((dividend - temp), divisor);
+        5. Return quotient;
+    ```
+
+    **Programm Link:** https://github.com/VedantWankhade/coding-problems/blob/master/division_without_mul_div_operator.cpp
