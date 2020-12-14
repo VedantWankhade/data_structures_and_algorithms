@@ -79,3 +79,51 @@ Real world problems include real objects. For example, suppose we want to write 
     ```
 
     **Programm Link:** https://github.com/VedantWankhade/coding-problems/blob/master/division_without_mul_div_operator.cpp
+
+2. **Problem:** There are twenty-five horses. At most, five horses can race together at a time. You must determine the fastest, second fastest, and third fastest horses. Find the minimum number of races in which this can be done.
+
+**Answer:** 7 races
+
+**Solution:** We have 25 horses, lets arrange them in a 5x5 matrix. Where each row will represent a race.
+
+                       1       2       3       4       5
+    Race 1 ->    1   [1,1]   [1,2]   [1,3]   [1,4]   [1,5]
+    Race 2 ->    2   [2,1]   [2,2]   [2,3]   [2,4]   [2,5]
+    Race 3 ->    3   [3,1]   [3,2]   [3,3]   [3,4]   [3,5]
+    Race 4 ->    4   [4,1]   [4,2]   [4,3]   [4,4]   [4,5]
+    Race 5 ->    5   [5,1]   [5,2]   [5,3]   [5,4]   [5,5]
+
+After these 5 races, we have 5 horses which are the `fastest in there respective row (race)`. If we race these 5 horses in Race 6, the winning horse will be the `fastest among the 25 horses`. Now the `second fastest horse among the 25 horses` could be the `second fastest horse in the race 6` or `second fastest horse in the race 1`. So we have to race these two horses.
+The `third fastest horse among 25` could be the `third fastest horse in the race 6` or the `second fastes horse in race 2` or the `third fastest horse in Race 1`. So we have to race these three horses too. And we can race these five ramaining horse in a single race Race 7. 
+
+For example, suppose in first 5 races, the fastest horse are the 5th horses, second fastest are the 4th horses and third fastest are 3rd in row. 
+
+For instance, the fastest horse in Race 1 is [1,5], the second fastest is [1,4] and the third fastest is [1,3].
+
+If we race the fastest horses from each row ([1,5], [2,5], [3,5], [4,5], [5,5]) in Race 6, the winning horse will be the fastest among all 25 horses. 
+
+Race 6 -> [1,5], [2,5], [3,5], [4,5], [5,5]
+
+Let's say the winning horse in Race 6 is [1,5]. So [1,5] is the fastes horse among 25 horses.
+
+                       1       2       3       4       5
+    Race 1 ->    1   [1,1]   [1,2]   [1,3]   [1,4]   [1,5] 
+    Race 2 ->    2   [2,1]   [2,2]   [2,3]   [2,4]   [2,5]
+    Race 3 ->    3   [3,1]   [3,2]   [3,3]   [3,4]   [3,5]
+    Race 4 ->    4   [4,1]   [4,2]   [4,3]   [4,4]   [4,5]
+    Race 5 ->    5   [5,1]   [5,2]   [5,3]   [5,4]   [5,5]
+
+                                                        ^
+                                                        |
+                                                      Race 6
+
+
+Now the `second fastest horse among all 25` could be any runner up horse to [1,5]. The runner up horses to [1,5] are [1,4] (second fastest horse from Race 1) and [2,5] (second fastest horse in Race 6).
+So we have to race these two horses.
+And the `third fastest among all 25` could be any runner up horse to [1,5] and [2,5] (second fastes in Race 6) and second runner up to [1,5]. So we have to race these horses too.
+
+We can race these remaining horses in Race 7. 
+
+Race 7 -> [1,4], [2,5], [1,3], [2,4], [3,5]
+
+The `fastest in Race 7` will be the `second fastest among 25` and the `second fastest in Race 7` will be the `third fastest among 25`.
