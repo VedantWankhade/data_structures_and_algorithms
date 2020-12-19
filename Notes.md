@@ -58,7 +58,7 @@ Real world problems include real objects. For example, suppose we want to write 
 **Modeling your application in terms of well-defined structures and algorithms is the most important single step towards a solution.**
 
 
-# Interview Questions
+## Interview Questions
 1. **Problem:** Write a function to perform integer division without using either the `/` or `*` operators.
 
     **Solution:** The key observation is that the quotient of a division is just the number of times that we can subtract the divisor from the dividend without making it negative.
@@ -127,3 +127,158 @@ We can race these remaining horses in Race 7.
 Race 7 -> [1,4], [2,5], [1,3], [2,4], [3,5]
 
 The `fastest in Race 7` will be the `second fastest among 25` and the `second fastest in Race 7` will be the `third fastest among 25`.
+
+3. **Problem:** Prove that a tree with `n` vertices has `n - 1` edges.
+   
+   **Solution:** Basis case for `n = 1` is correct as it should have `0` edges, and `1 - 1 = 0`.
+
+    Let `v(n)` be the number of vertices for `n` nodes(vertices) and `e(n)` be the number of edges.
+
+    Inductive step: Consider the condition to be true for `n = k`, i.e `v(k) = k` and `e(k) = k - 1`.
+
+    Now we prove for `n = k + 1`,
+        We can say that, 
+            `The number of edges for k + 1 nodes is equal to number of edges for k nodes + number of edges required to add k + 1 th node.
+
+            e(k + 1) = e(k) + 1             (as adding on node requires one edge)
+            e(k + 1) = v(k) - 1 + 1
+            e(k + 1) = v(k)
+            e(k + 1) = k
+        Hence proved 
+
+## LeetCode
+
+1. **Problem:** https://leetcode.com/problems/daily-temperatures/
+
+   **Solution:** https://github.com/VedantWankhade/coding-problems/blob/master/daily_temperature.cpp
+
+2. **Problem:** https://leetcode.com/problems/rotate-list/
+    
+    **Solution:** 
+    ```
+    ROTATE_LIST(head, k)
+        1. If list is empty or only has 1 element return lists as it is
+        2. Else find length len of the list
+        3. Set k = k % len
+        4. Repeat k times
+            a. 
+    ```
+
+# Algorithm Analysis
+
+## The RAM Model of Computation
+
+Machine-independent algorithm design depends upon a hypothetical computercalled theRandom Access Machine, or RAM. Under this model of computation,we are confronted with a computer where:
+
+* Each simple operation (+, *, –, =, if, call) takes exactly one time step.
+* Loops and subroutines are not considered simple operations. Instead, they are the composition of many single-step operations.
+* Each memory access takes exactly one time step. Furthermore, we have as much memory as we need. The RAM model takes no notice of whether an item is in cache or on the disk.
+
+## Best-Case, Worst-Case, and Average-Case Complexity
+
+To understand the notions of the best, worst, and average-case complexity,think about running an algorithm over all possible instances of data that can befed to it. For the problem of sorting, the set of possible input instances includesevery possible arrangement ofnkeys, for all possible values ofn.  We canrepresent each input instance as a point on a graph (shown in figure below) wherethex-axis represents the size of the input problem (for sorting, the number ofitems to sort), and they-axis denotes the number of steps taken by the algorithmin this instance.
+
+![](./images/worst-best-average-case.png)
+
+* The worst-case complexity of the algorithm is the function defined by the maximum number of steps taken in any instance of size n. This represents the curve passing through the highest point in each column.
+* The best-case complexity of the algorithm is the function defined by the minimum number of steps taken in any instance of size n. This represents the curve passing through the lowest point of each column.
+* The average-case complexity or expected time of the algorithm, which is the function defined by the average number of steps over all instances of size n.
+
+## The Big Oh Notation
+
+It proves to be much easier to talk in terms of simple upper and lower boundsof time-complexity functions using the Big Oh notation. The Big Oh simplifiesour analysis by ignoring levels of detail that do not impact our comparison ofalgorithms.The Big Oh notation ignores the difference between multiplicative constants.The functionsf(n)=2nandg(n)=nare identical in Big Oh analysis. Thismakes sense given our application. Suppose a given algorithm in (say) C lan-guage ran twice as fast as one with the same algorithm written in Java. Thismultiplicative factor of two can tell us nothing about the algorithm itself, be-cause both programs implement exactly the same algorithm. We should ignoresuch constant factors when comparing two algorithms.
+
+![](./images/speed-bumps.png)
+
+![](./images/oh-omega-theta.png)
+
+* f(n)=O(g(n)) means c·g(n) is an upper bound on f(n). Thus, there exists some constant c such that f(n)≤c·g(n) for every large enough n (that is, for all n ≥ n0, for some constant n0).
+* f(n)=Ω(g(n)) means c·g(n) is a lower bound on f(n). Thus, there exists some constant c such that f(n)≥c·g(n) for all n ≥ n0. 
+* f(n)=Θ(g(n)) means c1·g(n) is an upper bound on f(n) and c2·g(n) is a lower bound on f(n), for all n≥n0. Thus, there exist constants c1 and c2 such that f(n)≤c1·g(n) and f(n)≥c2·g(n) for all n≥n0. This means that g(n) provides a nice, tight bound on f(n).
+
+## Dominance Relation
+
+The Big Oh notation groups functions into a set of classes, such that all the functions within a particular class are essentially equivalent. Functions f(n)=0.34n and g(n) = 234234n belong in the same class, namely those that are order Θ(n). Furthermore, when two functions f and g belong to different classes, they are different with respect to our notation, meaning either f(n)=O(g(n)) or g(n)=O(f(n)), but not both. 
+
+We say that a faster growing function dominates a slower growing one. When f and g belong to different classes (i.e.f(n)=Θ(g(n))), we say g dominates f when f(n)=O(g(n)). This is sometimes written g >> f.
+
+* `Constant functions`, f(n) = 1: Such functions might measure the cost of adding two numbers, printing out “The Star Spangled Banner,” or the growth realized by functions such as f(n) = min(n,100). In the big picture, there is no dependence on the parameter n.
+* `Logarithmic functions`, f(n) = logn: Logarithmic time complexity shows up in algorithms such as binary search. Such functions grow quite slowly as n gets big, but faster than the constant function (which is standing still, after all). 
+* `Linear functions`, f(n)=n: Such functions measure the cost of looking at each item once (or twice, or ten times) in an n element array, say to identify the biggest item, the smallest item, or compute the average value.
+* `Superlinear functions/Linearrithmic functions`, f(n)=n lgn: This important class of functions arises in such algorithms as quicksort and mergesort. They grow just a little faster than linear), but enough so to rise to a higher dominance class.
+* `Quadratic functions`, f(n)=npow(2): Such functions measure the cost of looking at most or all pairs of items in an n-element universe. These arise in algorithms such as insertion sort and selection sort.
+* `Cubic functions`, f(n)=n3: Such functions enumerate all triples of items in an n-element universe. These also arise in certain dynamic programming algorithms.
+* `Exponential functions`, f(n)=cn for a given constant c>1: Functions like 2n arise when enumerating all subsets of n items. As we have seen, exponential algorithms become useless fast, but not as fast as. . .
+* `Factorial functions`, f(n)=n!: Functions like n! arise when generating all permutations or orderings of n items.
+
+    n! >> 2<sup>n</sup> >> n<sup>3</sup> >> n<sup>2</sup> >> nlogn >> n >> logn >> 1
+
+## Reasoning about Efficiency
+
+**Example 1:** Selection sort
+
+Main logic of selection sort is 
+
+```C
+for (i =0;i<n; i++) {
+    min = i;
+    for (j = i +1;j < n; j++) {
+        if (s[j]< s[min]) {
+            min = j;
+        }
+    }
+    swap(&s[i],&s[min]);
+```
+
+The outer for loop goes around `n` times. The nested inner loop goes around `n−(i+ 1)` times, where `i` is the index of the outer loop. The exact number of times the if statement is executed is given by:
+
+$$
+T(n) \quad= \quad\sum_{i = 0}^{n - 1} \sum_{j = i + 1}^{n - 1} 1\\
+     = \sum_{i = 0}^{n - 1} {n - 1 - i}
+$$
+As i goes from 0 to n - 1, j goes from j = 1 to n - 1 hence the sum is n - 1 - i
+
+If we try putting each value of i, we get
+
+$$
+\sum_{i = 0}^{n - 1} {n - 1 - i} = (n - 1 - 0) + (n - 1 - 1) + (n - 1 - 2) + .... + (n - 1 - (n - 2)) + (n - 1 - (n - 1))\\
+                                 = (n - 1) + (n - 2) + (n - 3) + ...... + 1 + 0\\
+                                 = (n - 1)((n - 1) + 1)/2\\
+                                 = (n - 1)(n)/2\\
+                                 = (n^2 - n)/2\\
+                            T(n) = O(n^2)
+$$
+
+**Example 2:** Inertion Sort
+
+The main logic of insertion sort is
+
+```C
+for (i =1;i < n; i++) {
+    j = i; 
+    while((j > 0) && (s[j] < s[j -1])) {
+        swap(&s[j], &s[j-1]);
+        j = j-1;
+    }
+}
+```
+
+How often does the inner while loop iterate? This is tricky because there are two different stopping conditions: one to prevent us from running off the bounds of the array (j>0) and the other to mark when the element finds its proper place in sorted order (s[j] < s[j−1]). Since worst-case analysis seeks an upper bound on the running time, we ignore the early termination and assume that this loop always goes around `i` times.
+In fact, we can simplify further and assume it always goes around `n` times since i < n. Since the outer loop goes around `n` times, insertion sort must be a quadratic time algorithm, that is, $O(n^2)$.
+
+### Examples
+
+1. f(n) = 3n2 − 100n + 6 = O(n2), because for c=3, 3n2 > f(n) 
+2. f(n) = 3n2 − 100n + 6 = O(n3), because for c=1, n3 > f(n) when n > 3; 
+3. f(n) = 3n2 − 100n + 6 = O(n), because for any c > 0, cn < f(n) when n > (c+ 100)/3, since n > (c+ 100)/3 
+   
+    ⇒ 3n > c + 100 
+
+    ⇒ 3n2 > cn + 100n > cn + 100n − 6 
+
+    ⇒ 3n2 − 100n + 6 = f(n) > cn; 
+4. f(n) = 3n2 − 100n + 6 = Ω(n2), because for c = 2, 2n2 < f(n) when n > 100; f(n) = 3n2 − 100n + 6 = Ω(n3), because for any c > 0, f(n) < c·n3 when n > 3/c + 3; 
+5. f(n) = 3n2 − 100n + 6 = Ω(n), because for any c > 0, f(n) < 3n2 + 6n2 = 9n2, which is < cn3 when n > max(9/c,1); 
+6. f(n) = 3n2 − 100n + 6 = Θ(n2), because both O and Ω apply; f(n) = 3n2 − 100n + 6 = Θ(n3), because only O applies; 
+7. f(n) = 3n2 − 100n + 6 = Θ(n), because only Ω applies.
+
