@@ -1,3 +1,7 @@
+Data Structures and Algorithms 
+
+Reference: The Algorithm Design Manual by Steven Skiena
+
 # Proof by Induction
 * Induction and recursion are similiar.
 * Recursion is the mathematical induction in action.
@@ -256,7 +260,7 @@ The main logic of insertion sort is
 ```C
 for (i =1;i < n; i++) {
     j = i; 
-    while((j > 0) && (s[j] < s[j -1])) {
+    while ((j > 0) && (s[j] < s[j -1])) {
         swap(&s[j], &s[j-1]);
         j = j-1;
     }
@@ -266,11 +270,97 @@ for (i =1;i < n; i++) {
 How often does the inner while loop iterate? This is tricky because there are two different stopping conditions: one to prevent us from running off the bounds of the array (j>0) and the other to mark when the element finds its proper place in sorted order (s[j] < s[j−1]). Since worst-case analysis seeks an upper bound on the running time, we ignore the early termination and assume that this loop always goes around `i` times.
 In fact, we can simplify further and assume it always goes around `n` times since i < n. Since the outer loop goes around `n` times, insertion sort must be a quadratic time algorithm, that is, $O(n^2)$.
 
+**Example 3:** Sttring Pattern Matching
+
+**Input:** A text string t and a pattern string p.
+
+**Output:** Index of pattern p in t, if not found return -1
+
+**Solution:** 
+```C
+int findmatch(char *p, char *t) {
+    
+    int i, j;           /* counters */
+    int m, n;     /* string lengths */
+    
+    m = strlen(p);
+    n = strlen(t);
+    
+    for (i = 0; i <= (n-m); i = i + 1) {
+        
+        j = 0;
+        while ((j < m) && (t[i + j] == p[j])) {
+            j = j + 1;
+        }
+
+        if (j == m) {
+            return(i);      /* location of the first match */
+        }
+    }
+
+    return(-1); /* there is no match */
+}
+```
+The inner while loop runs at most `m` times.
+
+The outer for loop runs at most `n - m` times.
+
+The two `strlen` functions also have complexities. Let's assume that `strlen` function explicitly counts the number of characters in string, this means that it takes `m` and `n` steps to calculate length of pattern `p` and string `t` respectively.
+
+Adding above steps, we get
+
+    T(n) = (m + n) + (n - m)(m)
+    
+    We know, almost always the length of pattern is going to be less than that of string 
+    i.e m < n
+    i.e m + n < 2n
+    i.e m + n = O(n)
+
+    T(n) = O(n + nm - m^2)
+
+    We know,
+    n < nm
+    i.e n + nm = O(nm)
+
+    T(n) = O(mn - m^2)
+
+    Here, m^2 is negative hence only reduces the total value, so we can drop m^2
+
+    T(n) = O(mn)
+
+**Example 4:** Matrix Multiplication
+
+**Input:** Two matrices, A (of dimension x × y) and B (dimension y × z).
+
+**Output:** An x×z matrix C where C[i][j] is the dot product of the ith row of A
+and the jth column of B.
+
+**Solution:** The main logic is 
+```C
+for (i = 1; i <= a.rows; i++) {
+    for (j = 1; j <= b.columns; j++) {
+        c.m[i][j] = 0;
+            for (k = 1; k <= b.rows; k++) {
+                c.m[i][j] += a.m[i][k] * b.m[k][j];
+            }
+    }
+}
+```
+Three nested loops should smell $O(n^3)$ by this point, and technically that is correct but there is a more precise answer.
+
+$$
+T(x, y, z) = \sum_{i = 1}^{x} \sum_{j = 1}^{y} \sum_{k = 1}^{z} 1\\
+           = \sum_{i = 1}^{x} \sum_{j = 1}^{y} z\\
+           = \sum_{i = 1}^{x} yz\\
+           = xyz\\
+T(x, y, z) = O(xyz)
+$$
+ 
 ### Examples
 
 1. f(n) = 3n2 − 100n + 6 = O(n2), because for c=3, 3n2 > f(n) 
 2. f(n) = 3n2 − 100n + 6 = O(n3), because for c=1, n3 > f(n) when n > 3; 
-3. f(n) = 3n2 − 100n + 6 = O(n), because for any c > 0, cn < f(n) when n > (c+ 100)/3, since n > (c+ 100)/3 
+3. f(n) = 3n2 − 100n + 6 = O(n), because for any c > 0, cn < f(n) when n > (c+ 100)/3, since n > (c+ 100)/3 
    
     ⇒ 3n > c + 100 
 
@@ -281,4 +371,103 @@ In fact, we can simplify further and assume it always goes around `n` times sinc
 5. f(n) = 3n2 − 100n + 6 = Ω(n), because for any c > 0, f(n) < 3n2 + 6n2 = 9n2, which is < cn3 when n > max(9/c,1); 
 6. f(n) = 3n2 − 100n + 6 = Θ(n2), because both O and Ω apply; f(n) = 3n2 − 100n + 6 = Θ(n3), because only O applies; 
 7. f(n) = 3n2 − 100n + 6 = Θ(n), because only Ω applies.
+
+# Summation
+
+Summation formulae are concise expressions describing the addition of an
+arbitrarily large set of numbers, in particular the formula
+$$\sum_{i = 1}^{n} f(i) = f(1) + f(2) + .... + f(n - 1) + f(n)$$
+
+Simple closed forms exist for summations of many algebraic functions. For
+example, since the sum of n ones is n,
+$$\sum_{i = 1}^{n}1 = n$$
+
+For 
+$$\sum_{i = 1}^{n}i$$
+When n is even, the sum of the first n = 2k integers can be seen by pairing up
+the ith and (n − i + 1)th integers:
+$$ 
+\sum_{i = 1}^{n}i = \sum_{i = 1}^{2k} (i + (2k - i + 1))\\
+                  = \sum_{i = 1}^{2k}{k(2k + 1)}\\
+                  = k(2k + 1)
+                  = n(n + 1)/2                  
+$$
+**The same result holds for odd n with slightly more careful analysis.**
+
+Recognizing two basic classes of summation formulae will get us a long way
+in algorithm analysis:
+* **Sum of a power of integers:** We encountered the sum of the first `n` positive
+integers $S(n) = \sum_{i=1}^{n} i = n(n + 1)/2$ in the analysis of selection sort.
+From the big picture perspective, the important thing is that the sum is
+quadratic, not that the constant is 1/2. In general, for p ≥ 0, 
+$$
+    S(n, p) = \sum_{i = 1}^{n} i^p = \theta(n^{p + 1})
+$$ 
+For p < −1, this sum S(n, p) always converges to a constant as n → ∞,
+while for p ≥ 0 it diverges. The insteresting case is of Harmonic numbers, 
+$$ 
+H(n) = \sum_{i = 1}^{n} 1/i = \theta(logn) 
+$$
+* **Sum of a geometric progression:** In geometric progressions, the index of
+the loop affects the exponent, that is,
+$$
+G(n, a) = \sum_{i = 0}^{n}a^i = (a^{n+1} - 1)/(a-1)
+$$
+When |a| < 1, G(n, a) converges to a constant as n→∞.
+
+This series convergence proves to be the great “free lunch” of algorithm
+analysis. It means that the sum of a linear number of things can be
+constant, not linear. For example, 1+1/2+1/4+1/8+. . . ≤ 2 no matter
+how many terms we add up.
+
+When a > 1, the sum grows rapidly with each new term, as in 1+2+4+
+8 + 16 + 32 = 63. Indeed, G(n, a) = Θ(an+1) for a > 1.
+
+**Surprise Question**
+
+**Problem:** Prove that $\sum_{i = 1}^{n} i * i! = (n+1)! - 1$ by induction.
+
+**Solution:** 
+
+**Base Case:** Base case is of i = 1, which is correctly handled.
+
+**Inductive Hypothesis:** Let's assume the formula is correct for i = n. i.e $\sum_{i = 1}^{n} i * i! = (n+1)! - 1$
+
+Now let's prove that the formula is correct for i = n + 1.
+$$
+\sum_{i = 1}^{n + 1} i * i! = (\sum_{i = 1}^{n} i * i!) + (n + 1)(n + 1)!\\
+                            = (n+1)! - 1 + (n + 1)(n + 1)!\\
+                            = - 1 + (n + 1)! * (n + 2)\\
+                            = (n + 2)! - 1
+$$
+Hence, proved
+
+# Logarithms and Their Applications
+
+A logarithm is simply an inverse exponential function.
+Saying $b^x = y$ is equivalent to saying that $x = log_{b}y$. Further, this equivalence
+is the same as saying $b^{log_by} = y$.
+
+## Logarithms and Binary Search
+
+Binary search is a good example of an O(log n) algorithm. To locate a particular
+person p in a telephone book2 containing n names, you start by comparing
+p against the middle, or (n/2)nd name, say Monroe, Marilyn. Regardless of
+whether p belongs before this middle name (Dean, James) or after it (Presley,
+Elvis), after just one comparison you can discard one half of all the names
+in the book. The number of steps the algorithm takes equals the number of
+times we can halve n until only one name is left. By definition, this is exactly
+log2 n. Thus, twenty comparisons suffice to find any name in the million-name
+Manhattan phone book!
+
+Binary search is one of the most powerful ideas in algorithm design. This
+power becomes apparent if we imagine trying to find a name in an unsorted
+telephone book.
+
+## Logarithms and Trees
+
+A binary tree of height 1 can have up to 2 leaf nodes, while a tree of height 2
+can have up to 4 leaves. What is the height h of a rooted binary tree with n
+leaf nodes? Note that the number of leaves doubles every time we increase the
+height by 1. To account for n leaves, n = 2h, which implies that h = log2 n.
 
