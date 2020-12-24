@@ -65,24 +65,24 @@ Real world problems include real objects. For example, suppose we want to write 
 ## Interview Questions
 1. **Problem:** Write a function to perform integer division without using either the `/` or `*` operators.
 
-    **Solution:** The key observation is that the quotient of a division is just the number of times that we can subtract the divisor from the dividend without making it negative.
+**Solution:** The key observation is that the quotient of a division is just the number of times that we can subtract the divisor from the dividend without making it negative.
 
-    Here we are increasing the value of divisor using **left shift by 1** (equivalent to **multiply by 2**) until it is greater than or equal to dividend. For example, consider `dividend = 15` and `divisor = 5`, we are increasing divisor `5` using `left shift by 1` until it can be safely substracted from dividend `15`. In this case `5 << 1 = 10`,
-    can safely be substracted from `15`. That means we are shifting one time, but since we are "shifting", we also have to shift the number of "shifting" which becomes `2`. Now we substract `10` from `15`, `15 - 10 = 5`, this is the new dividend. Now we apply same method to divide new dividend `5` by the divisor `5`, which gives `1`. Now we add this result to previous result.
+Here we are increasing the value of divisor using **left shift by 1** (equivalent to **multiply by 2**) until it is greater than or equal to dividend. For example, consider `dividend = 15` and `divisor = 5`, we are increasing divisor `5` using `left shift by 1` until it can be safely substracted from dividend `15`. In this case `5 << 1 = 10`,
+can safely be substracted from `15`. That means we are shifting one time, but since we are "shifting", we also have to shift the number of "shifting" which becomes `2`. Now we substract `10` from `15`, `15 - 10 = 5`, this is the new dividend. Now we apply same method to divide new dividend `5` by the divisor `5`, which gives `1`. Now we add this result to previous result.
 
-    **Psuedocode:**
-    ```
-    DIVIDE_USING_SHIFT_OPERATOR(dividend, divisor) 
-        1. Handle base cases like divide by 0, and divide by 1 etc
-        2. Set quotient = 1 and temp = divisor
-        3. Repeat while (temp << 1) <= dividend 
-                a. temp = temp << 1
-                b. quotient = quotient << 1
-        4. quotient = quotient + DIVIDE_USING_SHIFT_OPERATOR((dividend - temp), divisor);
-        5. Return quotient;
-    ```
+**Psuedocode:**
+```
+DIVIDE_USING_SHIFT_OPERATOR(dividend, divisor) 
+1. Handle base cases like divide by 0, and divide by 1 etc
+2. Set quotient = 1 and temp = divisor
+3. Repeat while (temp << 1) <= dividend 
+        a. temp = temp << 1
+        b. quotient = quotient << 1
+4. quotient = quotient + DIVIDE_USING_SHIFT_OPERATOR((dividend - temp), divisor);
+5. Return quotient;
+```
 
-    **Programm Link:** https://github.com/VedantWankhade/coding-problems/blob/master/division_without_mul_div_operator.cpp
+**Programm Link:** https://github.com/VedantWankhade/coding-problems/blob/master/division_without_mul_div_operator.cpp
 
 2. **Problem:** There are twenty-five horses. At most, five horses can race together at a time. You must determine the fastest, second fastest, and third fastest horses. Find the minimum number of races in which this can be done.
 
@@ -471,3 +471,207 @@ can have up to 4 leaves. What is the height h of a rooted binary tree with n
 leaf nodes? Note that the number of leaves doubles every time we increase the
 height by 1. To account for n leaves, n = 2h, which implies that h = log2 n.
 
+What if we generalize to trees that have d children, where d = 2 for the case
+of binary trees? A tree of height 1 can have up to d leaf nodes, while one of
+height 2 can have up to d2 leaves. The number of possible leaves multiplies by
+d every time we increase the height by 1, so to account for n leaves, n = dh ,
+which implies that h = log d n, as shown in figure below
+
+![](images/tree.png) where, d = 3
+
+The punch line here is that short trees can have very many leaves, which is
+the main reason why binary trees prove fundamental to the design of fast data
+structures.
+
+## Logarithms and Bits
+
+There are two bit patterns of length 1 (0 and 1), four of length 2 (00, 01, 10,
+and 11), and eight of length 3. How many bits w do we
+need to represent any one of n different possibilities, be it one of n items or the
+integers from 0 to n − 1? The key observation is that there must be at least n different bit patterns
+of length w. Since the number of different bit patterns doubles as you add each
+bit, we need at least w bits where 2w = n. In other words, we need w = log 2 n
+bits.
+
+## Logarithms and Multiplication
+
+Logarithms are still useful for multiplication, particularly for exponentiation.
+Recall that loga(xy) = loga (x) + loga (y); that is, the log of a product is the sum
+of the logs. A direct consequence of this is
+loga nb = b · loga n
+
+How can we compute ab for any a and b using the exp(x) and ln(x) functions
+on your calculator, where exp(x) = ex and ln(x) = loge (x)? We know
+ab = exp(ln(ab )) = exp(b ln(a))
+so the problem is reduced to one multiplication plus one call to each of these
+functions.
+
+## Fast Exponentiation
+
+Suppose that we need to exactly compute the value of an for some reasonably
+large n.
+
+The simplest algorithm performs n − 1 multiplications, by computing a × a ×
+. . . × a. However, we can do better by observing that n = n/2 + n/2. If n
+is even, then an = (an/2 )2 . If n is odd, then an = a(an/2 )2 . In either case, we
+have halved the size of our exponent at the cost of, at most, two multiplications,
+so O(lg n) multiplications suffice to compute the final value. 
+```
+function power(a, n)
+
+    if (n = 0) then 
+        return(1)
+
+    x = power(a, n/2 )
+
+    if (n is even) then 
+        return(x2 )
+
+    else return(a × x2 )
+```
+This simple algorithm illustrates an important principle of divide and con-
+quer.
+
+## Logarithms and Summations
+
+The Harmonic numbers arise as a special case of a sum of a power of inte-
+gers, namely H(n) = S(n, −1). They are the sum of the progression of simple
+reciprocals, namely,
+$$
+H(n) = \sum_{i=1}^{n} 1/i = \theta(\log(n))
+$$
+
+## Properties of Logarithms
+
+As we have seen, stating bx = y is equivalent to saying that x = logb y. The
+b term is known as the base of the logarithm. Three bases are of particular
+importance for mathematical and historical reasons:
+* **Base b = 2:** The binary logarithm, usually denoted lg x, is a base 2 loga
+rithm. We have seen how this base arises whenever repeated halving (i.e.,
+binary search) or doubling (i.e., nodes in trees) occurs. Most algorithmic
+applications of logarithms imply binary logarithms.
+* **Base b = e:** The natural logarithm, usually denoted ln x, is a base e =
+2.71828 . . . logarithm. The inverse of ln x is the exponential function
+exp(x) = ex on your calculator. Thus, composing these functions gives us
+the identity function,
+exp(ln x) = x and ln(exp x) = x
+* **Base b = 10:** Less common today is the base-10 or common logarithm, usu
+ally denoted as log x. This base was employed in slide rules and logarithm
+books in the days before pocket calculators.
+
+**Log of multiplication:**
+$$
+log_a(xy) = log_a(x) + log_a(y)
+$$
+
+**Convert into another base:**
+$$
+log_ab = log_cb / log_ca
+$$
+
+Two implications of these properties of logarithms are important to appre-
+ciate from an algorithmic perspective:
+* `The base of the logarithm has no real impact on the growth rate`: Compare
+the following three values: log2 (1, 000, 000) = 19.9316, log3 (1, 000, 000) =
+12.5754, and log100 (1, 000, 000) = 3. A big change in the base of the
+logarithm produces little difference in the value of the log. Changing the
+base of the log from a to c involves multiplying by log c a. This conversion
+factor is absorbed in the Big Oh notation whenever a and c are constants.
+Thus, we are usually justified in ignoring the base of the logarithm when
+analyzing algorithms.
+
+**Example:** 
+
+**Problem:** How many queries does binary search take on the million-name
+Manhattan phone book if each split were 1/3-to-2/3 instead of 1/2-to-1/2?
+
+**Solution:** When performing binary searches in a telephone book, how important
+is it that each query split the book exactly in half? Not very much. For the
+Manhattan telephone book, we now use log 3/2 (1, 000, 000) ≈ 35 queries in the
+worst case, not a significant change from log 2(1, 000, 000) ≈ 20. Changing the
+base of the log does not affect the asymptotic complexity. The effectiveness of
+binary search comes from its logarithmic running time, not the base of the log.
+
+* `Logarithms cut any function down to size`: The growth rate of the loga-
+rithm of any polynomial function is O(lg n). This follows because
+$log_anb = b · log_an$
+
+The effectiveness of binary search on a wide range of problems is a con-
+sequence of this observation. Note that performing a binary search on a
+sorted array of $n^2$ things requires only twice as many comparisons as a
+binary search on n things. 
+
+# Advanced Analysis
+
+## Esoteric Functions
+
+* `Inverse Ackermann’s function f (n) = α(n)`: This function arises in the
+detailed analysis of several algorithms, most notably the Union-Find data
+structure. Unlike the
+constant function f (n) = 1, α(n) eventually gets to infinity as n → ∞,
+but it certainly takes its time about it. The value of α(n) is smaller than
+5 for any value of n that can be written in this physical universe.
+* $f(n) = loglogn$: The “log log” function is just that the logarithm of
+the logarithm of n. One natural example of how it might arise is doing a
+binary search on a sorted array of only lg n items.
+* `f (n) = logn / loglogn`: This function grows a little slower than log n,
+because it is divided by an even slower growing function. To see where
+this arises, consider an n-leaf rooted tree of degree d. For binary trees,
+that is, when d = 2, the height h is given
+n = 2h → h = lg n
+by taking the logarithm of both sides of the equation. Now consider the
+height of such a tree when the degree d = log n. Then
+n = (log n)h
+ → h = log n/ log log n
+ * `f(n) = log2n`: This is the product of two log functions, (log n)×(log n). It
+might arise if we wanted to count the bits looked at when doing a binary
+search on n items, each of which was an integer from 1 to (say) n2 . Each
+such integer requires a lg(n2) = 2 lg n bit representation, and we look at
+lg n of them, for a total of 2 lg2 n bits.
+The “log squared” function typically arises in the design of intricate nested
+data structures, where each node in (say) a binary tree represents another
+data structure, perhaps ordered on a different key.
+* $f (n) = \sqrt{n}$: The square root is
+ not very esoteric, but represents the class of
+“sublinear polynomials” since $\sqrt{n} = n^1/2$. Such
+ functions
+ arise in building
+`d`-dimensional grids that contain n points. A $\sqrt{n} × \sqrt{n}$ square has area n,
+and an $n^{1/3} × n^{1/3} × n^{1/3}$ cube has volume n. In general, a `d`-dimensional
+hypercube of length $n^{1/d}$ on each side has volume n.
+*  $f(n) = n(1+\epsilon)$ : Epsilon ($\epsilon$) is the mathematical symbol to denote a con-
+stant that can be made arbitrarily small but never quite goes away.
+It arises in the following way. Suppose I design an algorithm that runs in
+2c · n(1+1/c) time, and I get to pick whichever c I want. For c = 2, this
+is 4n3/2 or O(n3/2 ). For c = 3, this is 8n4/3 or O(n4/3 ), which is better.
+Indeed, the exponent keeps getting better the larger I make c.
+The problem is that I cannot make c arbitrarily large before the 2 c term be-
+gins to dominate. Instead, we report this algorithm as running in O(n1+$\epsilon$),
+and leave the best value of $\epsilon$ to the beholder.
+
+## Limits and Dominance Relations
+
+The dominance relation between functions is a consequence of the theory of
+limits, which you may recall from taking calculus. We say that f (n) dominates
+g(n) if limn→∞ g(n)/f (n) = 0.
+
+Let’s see this definition in action. Suppose f (n) = 2n2 and g(n) = n2 .
+Clearly f (n) > g(n) for all n, but it does not dominate since
+$$
+\lim_{n\to\infty}{g(n)/f(n)} = \lim_{n\to\infty}{n^2/2n^2} \not ={0}
+$$
+This is to be expected because both functions are in the class Θ(n2 ). What
+about f (n) = n3 and g(n) = n2 ? Since
+$$
+\lim_{n\to\infty}{g(n)/f(n)} = \lim_{n\to\infty}{n^2/n^3} = 0
+$$
+the higher-degree polynomial dominates. This is true for any two polynomials,
+that is, na dominates nb if a > b since
+$$
+\lim_{n\to\infty}{n^b/n^a} = lim_{n\to\infty}{n^{b - a}} \to 0
+$$
+Thus, $n^{1.2}$ dominates $n^{1.1999999}$.
+
+$$
+n! >> c^n >> n^3 >> n^2 >> n^{1+\epsilon} >> nlog n >> n >> \sqrt n >> log^2n >> log n >> log n/ log log n >> log log n >> α(n) >> 1
+$$
